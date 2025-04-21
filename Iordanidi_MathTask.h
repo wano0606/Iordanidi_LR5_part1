@@ -3,21 +3,40 @@
 
 #include <iostream>
 #include <limits>
+#include <string> // Добавляем заголовочный файл для std::string
 using namespace std;
 
 // 1. Метод проверки ввода данных (с try-catch)
+// 1. Метод проверки ввода данных (с try-catch)
 bool validateInput(int& value, const string& prompt) {
+    string input; // Временная переменная для хранения введенной строки
+
+    cout << prompt;
+    cin >> input; // Считываем строку с клавиатуры
+
+    // Проверяем, что строка не пустая
+    if (input.empty()) {
+        cerr << "Ошибка: введите целое число." << endl;
+        return false;
+    }
+
     try {
-        cout << prompt;
-        cin >> value;
-        if (cin.fail()) { // Если ввод некорректный
-            throw runtime_error("Ошибка: введите целое число.");
+        // Преобразуем строку в целое число
+        value = stoi(input);
+
+        // Дополнительные проверки
+        if (value < 0) { // Проверка на отрицательное значение
+            cerr << "Ошибка: число не должно быть отрицательным." << endl;
+            return false;
         }
+        if (value > 1000) { // Проверка на максимальное значение (пример: 1000)
+            cerr << "Ошибка: число слишком большое." << endl;
+            return false;
+        }
+
         return true;
     } catch (const exception& e) {
-        cerr << e.what() << endl;
-        cin.clear(); // Сброс флага ошибки
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Очистка буфера
+        cerr << "Ошибка: некорректный формат числа." << endl;
         return false;
     }
 }
@@ -44,4 +63,5 @@ int calculateRemainder(int A, int B, int C) {
 int calculateIntegerPart(int A, int B, int C) {
     return (A + B) / C;
 }
+
 #endif
