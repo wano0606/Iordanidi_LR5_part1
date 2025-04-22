@@ -3,19 +3,18 @@
 
 #include <iostream>
 #include <limits>
-#include <string> // Добавляем заголовочный файл для std::string
+#include <regex> // Для использования регулярных выражений
 using namespace std;
 
 // 1. Метод проверки ввода данных (с try-catch)
-// 1. Метод проверки ввода данных (с try-catch)
 bool validateInput(int& value, const string& prompt) {
-    string input; // Временная переменная для хранения введенной строки
+    string input; // Переменная для хранения введенной строки
 
     cout << prompt;
-    cin >> input; // Считываем строку с клавиатуры
+    cin >> input;
 
-    // Проверяем, что строка не пустая
-    if (input.empty()) {
+    // Проверяем, что строка содержит только цифры (положительные числа)
+    if (!regex_match(input, regex("^\\d+$"))) { // Разрешаем только числа без букв и знаков
         cerr << "Ошибка: введите целое число." << endl;
         return false;
     }
@@ -24,12 +23,8 @@ bool validateInput(int& value, const string& prompt) {
         // Преобразуем строку в целое число
         value = stoi(input);
 
-        // Дополнительные проверки
-        if (value < 0) { // Проверка на отрицательное значение
-            cerr << "Ошибка: число не должно быть отрицательным." << endl;
-            return false;
-        }
-        if (value > 1000) { // Проверка на максимальное значение (пример: 1000)
+        // Проверка на слишком большое значение (например, больше 1000)
+        if (value > 1000) {
             cerr << "Ошибка: число слишком большое." << endl;
             return false;
         }
